@@ -1,0 +1,39 @@
+services:
+  app:
+    build: .
+    container_name: evoting-app
+    ports:
+      - "5100:3000"
+    environment:
+      - DATABASE_URL=mysql://evoting:evoting_pass@db:3306/evoting_db
+      - JWT_SECRET=evoting-secret-key-2026-change-me
+      - NEXT_PUBLIC_BASE_URL=https://demo.akhmadferdian.com
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - uploads_data:/app/public/uploads
+    restart: unless-stopped
+
+  db:
+    image: mariadb:11
+    container_name: evoting-db
+    ports:
+      - "5101:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: evoting_root_2026
+      MARIADB_DATABASE: evoting_db
+      MARIADB_USER: evoting
+      MARIADB_PASSWORD: evoting_pass
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  uploads_data:

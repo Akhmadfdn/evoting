@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+model Candidate {
+  id        Int      @id @default(autoincrement())
+  name      String
+  photo     String   @default("")
+  vision    String?  @db.Text
+  mission   String?  @db.Text
+  orderNum  Int      @default(0)
+  votes     Vote[]
+  createdAt DateTime @default(now())
+}
+
+model Participant {
+  id           Int      @id @default(autoincrement())
+  name         String
+  organization String?
+  qrToken      String   @unique
+  registered   Boolean  @default(false)
+  hasVoted     Boolean  @default(false)
+  vote         Vote?
+  createdAt    DateTime @default(now())
+}
+
+model Vote {
+  id            Int         @id @default(autoincrement())
+  participant   Participant @relation(fields: [participantId], references: [id])
+  participantId Int         @unique
+  candidate     Candidate   @relation(fields: [candidateId], references: [id])
+  candidateId   Int
+  createdAt     DateTime    @default(now())
+}
