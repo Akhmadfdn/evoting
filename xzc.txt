@@ -1,0 +1,80 @@
+root@Kodekami:/home/demo-evote/evoting# docker compose up -d --build
+[+] Building 26.3s (16/25)
+ => [internal] load local bake definitions                                                                         0.0s
+ => => reading from stdin 488B                                                                                     0.0s
+ => [internal] load build definition from Dockerfile                                                               0.0s
+ => => transferring dockerfile: 1.16kB                                                                             0.0s
+ => [internal] load metadata for docker.io/library/node:20-alpine                                                  1.4s
+ => [internal] load .dockerignore                                                                                  0.0s
+ => => transferring context: 91B                                                                                   0.0s
+ => [internal] load build context                                                                                  0.0s
+ => => transferring context: 4.92kB                                                                                0.0s
+ => [base 1/1] FROM docker.io/library/node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec  0.0s
+ => CACHED [builder 1/4] WORKDIR /app                                                                              0.0s
+ => CACHED [deps 1/6] RUN apk add --no-cache libc6-compat openssl                                                  0.0s
+ => CACHED [deps 2/6] WORKDIR /app                                                                                 0.0s
+ => CACHED [deps 3/6] COPY package.json package-lock.json* ./                                                      0.0s
+ => CACHED [deps 4/6] COPY prisma ./prisma/                                                                        0.0s
+ => CACHED [deps 5/6] RUN npm ci                                                                                   0.0s
+ => CACHED [deps 6/6] RUN npx prisma generate                                                                      0.0s
+ => CACHED [builder 2/4] COPY --from=deps /app/node_modules ./node_modules                                         0.0s
+ => [builder 3/4] COPY . .                                                                                         0.1s
+ => ERROR [builder 4/4] RUN npm run build                                                                         24.2s
+------
+ > [builder 4/4] RUN npm run build:
+1.894
+1.894 > demo@0.1.0 build
+1.894 > next build
+1.894
+4.043 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+4.044 This information is used to shape Next.js' roadmap and prioritize features.
+4.044 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+4.044 https://nextjs.org/telemetry
+4.045
+4.107 ▲ Next.js 16.1.6 (Turbopack)
+4.107
+4.437   Creating an optimized production build ...
+21.62 ✓ Compiled successfully in 15.8s
+21.72   Running TypeScript ...
+22.14   Collecting page data using 3 workers ...
+23.58 Error [PrismaClientConstructorValidationError]: Unknown property datasourceUrl provided to PrismaClient constructor.
+23.58 Read more at https://pris.ly/d/client-constructor
+23.58     at module evaluation (.next/server/chunks/[root-of-the-server]__5c01eabe._.js:1:1285)
+23.58     at instantiateModule (.next/server/chunks/[turbopack]_runtime.js:740:9)
+23.58     at getOrInstantiateModuleFromParent (.next/server/chunks/[turbopack]_runtime.js:763:12)
+23.58     at Context.esmImport [as i] (.next/server/chunks/[turbopack]_runtime.js:228:20)
+23.58     at module evaluation (.next/server/chunks/[root-of-the-server]__5c01eabe._.js:1:1887)
+23.58     at instantiateModule (.next/server/chunks/[turbopack]_runtime.js:740:9)
+23.58     at instantiateRuntimeModule (.next/server/chunks/[turbopack]_runtime.js:768:12)
+23.58     at getOrInstantiateRuntimeModule (.next/server/chunks/[turbopack]_runtime.js:781:12)
+23.94
+23.94 > Build error occurred
+23.95 Error: Failed to collect page data for /api/candidates/[id]
+23.95     at ignore-listed frames {
+23.95   type: 'Error'
+23.95 }
+24.06 npm notice
+24.06 npm notice New major version of npm available! 10.8.2 -> 11.11.0
+24.06 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.11.0
+24.06 npm notice To update run: npm install -g npm@11.11.0
+24.06 npm notice
+------
+[+] up 0/1
+ ⠙ Image evoting-app Building                                                                                      26.5s
+Dockerfile:21
+
+--------------------
+
+  19 |     COPY . .
+
+  20 |
+
+  21 | >>> RUN npm run build
+
+  22 |
+
+  23 |     # Production image
+
+--------------------
+
+failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
