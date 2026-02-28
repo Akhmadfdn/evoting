@@ -4,7 +4,7 @@ const mariadb = require('mariadb');
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 
-let connectionString = process.env.DATABASE_URL || 'mariadb://dummy:dummy@localhost:3306/dummy';
+let connectionString = process.env.DATABASE_URL || 'mariadb://evoting:evoting_pass@db:3306/evoting_db';
 connectionString = connectionString.replace(/^mysql:\/\//, 'mariadb://');
 
 const pool = mariadb.createPool(connectionString);
