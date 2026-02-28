@@ -1,8 +1,15 @@
 const { PrismaClient } = require('@prisma/client');
+const { PrismaMariaDb } = require('@prisma/adapter-mariadb');
+const mariadb = require('mariadb');
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 
-const prisma = new PrismaClient();
+let connectionString = process.env.DATABASE_URL || 'mariadb://dummy:dummy@localhost:3306/dummy';
+connectionString = connectionString.replace(/^mysql:\/\//, 'mariadb://');
+
+const pool = mariadb.createPool(connectionString);
+const adapter = new PrismaMariaDb(pool);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
     console.log('🌱 Seeding database...');
