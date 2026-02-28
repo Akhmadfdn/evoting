@@ -7,7 +7,6 @@ WORKDIR /app
 
 COPY package.json package-lock.json* ./
 COPY prisma ./prisma/
-COPY prisma.config.ts ./
 RUN npm ci
 
 # Generate Prisma client
@@ -34,13 +33,14 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./
 
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
 # Copy standalone output
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Install Prisma CLI and config package for production runtime commands (e.g. npx prisma db push)
+USER root
+RUN npm install prisma @prisma/config
+RUN chown -R nextjs:nodejs ./node_modules
 
 # Create uploads directory
 RUN mkdir -p public/uploads/candidates && chown -R nextjs:nodejs public
