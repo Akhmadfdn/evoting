@@ -8,11 +8,20 @@ let connectionString = process.env.DATABASE_URL || 'mariadb://evoting:evoting_pa
 // Force db host if localhost is passed from build-time inline envs
 connectionString = connectionString.replace(/localhost/, 'db');
 connectionString = connectionString.replace(/127\.0\.0\.1/, 'db');
-connectionString = connectionString.replace(/^mysql:\/\//, 'mariadb://');
 
-console.log('🔗 Connecting to:', connectionString);
+const parsedUrl = new URL(connectionString);
 
-const pool = mariadb.createPool(connectionString);
+console.log('🔗 Connecting to explicitly: host=', parsedUrl.hostname, 'port=', parsedUrl.port || 3306, 'db=', parsedUrl.pathname.slice(1));
+
+const pool = mariadb.createPool({
+    host: parsedUrl.hostname,
+    port: parseInt(parsedUrl.port || '3306', 10),
+    user: parsedUrl.username,
+    password: parsedUrl.password,
+    database: parsedUrl.pathname.slice(1),
+    connectionLimit: 10
+});
+
 const adapter = new PrismaMariaDb(pool);
 const prisma = new PrismaClient({ adapter });
 
