@@ -1,0 +1,33 @@
+root@Kodekami:/home/demo-evote/evoting# docker compose exec app npx prisma db seed
+Loaded Prisma config from prisma.config.ts.
+
+Running seed command `node prisma/seed.js` ...
+🌱 Seeding database...
+❌ Seed error: DriverAdapterError: pool timeout: failed to retrieve a connection from pool after 10000ms
+    (pool connections: active=0 idle=0 limit=10)
+    at PrismaMariaDbAdapter.onError (/app/node_modules/@prisma/adapter-mariadb/dist/index.js:354:11)
+    at /app/node_modules/@prisma/adapter-mariadb/dist/index.js:395:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async PrismaMariaDbAdapter.startTransaction (/app/node_modules/@prisma/adapter-mariadb/dist/index.js:395:18)
+    at async #r (/app/node_modules/@prisma/client/runtime/client.js:11:52648)
+    at async Vt.startInternalTransaction (/app/node_modules/@prisma/client/runtime/client.js:11:52134)
+    at async e.interpretNode (/app/node_modules/@prisma/client/runtime/client.js:11:45912)
+    at async e.run (/app/node_modules/@prisma/client/runtime/client.js:11:43231)
+    at async e.execute (/app/node_modules/@prisma/client/runtime/client.js:57:815)
+    at async jt.request (/app/node_modules/@prisma/client/runtime/client.js:58:2327) {
+  cause: {
+    originalCode: '45028',
+    originalMessage: 'pool timeout: failed to retrieve a connection from pool after 10000ms\n' +
+      '    (pool connections: active=0 idle=0 limit=10)',
+    kind: 'mysql',
+    code: 45028,
+    message: 'pool timeout: failed to retrieve a connection from pool after 10000ms\n' +
+      '    (pool connections: active=0 idle=0 limit=10)',
+    state: 'HY000',
+    cause: 'connect ECONNREFUSED ::1:3306'
+  },
+  clientVersion: '7.4.2'
+}
+
+An error occurred while running the seed command:
+Error: Command failed with exit code 1: node prisma/seed.js

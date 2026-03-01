@@ -5,7 +5,12 @@ const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 
 let connectionString = process.env.DATABASE_URL || 'mariadb://evoting:evoting_pass@db:3306/evoting_db';
+// Force db host if localhost is passed from build-time inline envs
+connectionString = connectionString.replace(/localhost/, 'db');
+connectionString = connectionString.replace(/127\.0\.0\.1/, 'db');
 connectionString = connectionString.replace(/^mysql:\/\//, 'mariadb://');
+
+console.log('🔗 Connecting to:', connectionString);
 
 const pool = mariadb.createPool(connectionString);
 const adapter = new PrismaMariaDb(pool);
