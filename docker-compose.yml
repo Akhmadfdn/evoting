@@ -8,6 +8,7 @@ services:
       - DATABASE_URL=mysql://evoting:evoting_pass@db:3306/evoting_db
       - JWT_SECRET=evoting-secret-key-2026-change-me
       - NEXT_PUBLIC_BASE_URL=https://evote.kodekami.com
+      - NODE_OPTIONS=--dns-result-order=ipv4first
     depends_on:
       db:
         condition: service_healthy
